@@ -19,8 +19,7 @@ public class PomodoroSessionTemplateService {
     public PomodoroSessionTemplate findTemplateById(Long sessionId, User user)
     {
         try{
-            return sessionTemplateRepository.findByIdAndUser(sessionId, user).orElse(null);
-
+            return sessionTemplateRepository.findByIdAndCreatedByOrIsPublicTrue(sessionId, user).orElse(null);
         }
         catch (Exception e){
             return null;
@@ -30,7 +29,7 @@ public class PomodoroSessionTemplateService {
     public List<PomodoroSessionTemplate> findAllTemplates(User user)
     {
         try{
-            return sessionTemplateRepository.findByUser(user);
+            return sessionTemplateRepository.findByCreatedByOrIsPublicTrue(user);
         }
         catch (Exception e){
             return null;
@@ -45,7 +44,7 @@ public class PomodoroSessionTemplateService {
                 PomodoroSessionTemplate sessionTemplate = new PomodoroSessionTemplate(0L, userForm.getName(), userForm.getWorkMinutes(), userForm.getBreakMinutes(), userForm.getNumberOfCycles(), userForm.getIsPublic(), user);
                 return sessionTemplateRepository.save(sessionTemplate);
             }
-            PomodoroSessionTemplate sessionTemplate = sessionTemplateRepository.findByIdAndUser(userForm.getId(), user).orElse(null);
+            PomodoroSessionTemplate sessionTemplate = sessionTemplateRepository.findByIdAndCreatedByOrIsPublicTrue(userForm.getId(), user).orElse(null);
             if(sessionTemplate == null)
                 return null;
             sessionTemplate.setName(userForm.getName());
