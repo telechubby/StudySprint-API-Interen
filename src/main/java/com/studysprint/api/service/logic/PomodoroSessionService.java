@@ -34,13 +34,13 @@ public class PomodoroSessionService {
         SessionStateType workState = sessionStateTypeRepository.findByName("WORK").orElseThrow();
         SessionStateType breakState = sessionStateTypeRepository.findByName("BREAK").orElseThrow();
         SessionStateType notStartedState = sessionStateTypeRepository.findByName("NOT_STARTED").orElseThrow();
-        List<PomodoroSession> workSession = sessionRepository.findByModeratorAndSessionState_SessionState(user, workState);
+        List<PomodoroSession> workSession = sessionRepository.findByModeratorAndSessionState_Type(user, workState);
         if(workSession.size()>0)
             return workSession.get(0);
-        List<PomodoroSession> breakSession = sessionRepository.findByModeratorAndSessionState_SessionState(user, breakState);
+        List<PomodoroSession> breakSession = sessionRepository.findByModeratorAndSessionState_Type(user, breakState);
         if(breakSession.size()>0)
             return breakSession.get(0);
-        List<PomodoroSession> notWorkingSession = sessionRepository.findByModeratorAndSessionState_SessionState(user, notStartedState);
+        List<PomodoroSession> notWorkingSession = sessionRepository.findByModeratorAndSessionState_Type(user, notStartedState);
         if(notWorkingSession.size()>0)
             return notWorkingSession.get(0);
         return null;
@@ -50,12 +50,12 @@ public class PomodoroSessionService {
         SessionStateType endedState = sessionStateTypeRepository.findByName("ENDED").orElse(null);
         if(endedState == null)
             return null;
-        return sessionRepository.findByModeratorAndIdAndSessionState_SessionState(user, sessionId, endedState).orElse(null);
+        return sessionRepository.findByModeratorAndIdAndSessionState_Type(user, sessionId, endedState).orElse(null);
     }
 
     public List<PomodoroSession> getPastUserSessions(User user){
         SessionStateType endedState = sessionStateTypeRepository.findByName("ENDED").orElseThrow();
-        return sessionRepository.findByModeratorAndSessionState_SessionState(user, endedState);
+        return sessionRepository.findByModeratorAndSessionState_Type(user, endedState);
     }
 
     public PomodoroSession createNewSession(User user, Long templateId)
@@ -80,12 +80,12 @@ public class PomodoroSessionService {
         PomodoroSession session = getCurrentUserSession(user);
         SessionStateType workState = sessionStateTypeRepository.findByName("WORK").orElse(null);
         SessionStateType notWorkingState = sessionStateTypeRepository.findByName("NOT_STARTED").orElse(null);
-        if(session == null || workState == null || notWorkingState == null || session.getSessionState() == null || session.getSessionState().getSessionState() != notWorkingState || session.getSessionState().getCycleNumber() != 0)
+        if(session == null || workState == null || notWorkingState == null || session.getSessionState() == null || session.getSessionState().getType() != notWorkingState || session.getSessionState().getCycleNumber() != 0)
             return null;
         PomodoroSessionState sessionState = session.getSessionState();
-        if(sessionState.getSessionState().equals(workState))
+        if(sessionState.getType().equals(workState))
             return workState;
-        sessionState.setSessionState(workState);
+        sessionState.setType(workState);
         sessionState.setLastSessionUpdate(LocalDateTime.now());
         sessionState.setCycleNumber(sessionState.getCycleNumber() + 1);
         sessionState = sessionStateRepository.save(sessionState);
@@ -105,7 +105,7 @@ public class PomodoroSessionService {
         if(session == null || endedState == null || session.getSessionState() == null)
             return null;
         PomodoroSessionState sessionState = session.getSessionState();
-        sessionState.setSessionState(endedState);
+        sessionState.setType(endedState);
         sessionState.setLastSessionUpdate(LocalDateTime.now());
         sessionState = sessionStateRepository.save(sessionState);
         if(sessionState == null)
@@ -124,25 +124,25 @@ public class PomodoroSessionService {
         if(session == null || notStartedState == null || workState == null || breakState == null || endedState == null || session.getSessionState() == null)
             return null;
         PomodoroSessionState sessionState = session.getSessionState();
-        if(sessionState.getSessionState().equals(workState))
+        if(sessionState.getType().equals(workState))
         {
             if(sessionState.getLastSessionUpdate().plusMinutes(session.getSessionTemplate().getWorkMinutes()).isBefore(LocalDateTime.now()))
             {
-                sessionState.setSessionState(breakState);
+                sessionState.setType(breakState);
                 sessionState.setLastSessionUpdate(LocalDateTime.now());
             }
         }
-        else if(sessionState.getSessionState().equals(breakState))
+        else if(sessionState.getType().equals(breakState))
         {
             if(sessionState.getLastSessionUpdate().plusMinutes(session.getSessionTemplate().getBreakMinutes()).isBefore(LocalDateTime.now()))
             {
                 if(sessionState.getCycleNumber().equals(session.getSessionTemplate().getNumberOfCycles()))
                 {
-                    sessionState.setSessionState(endedState);
+                    sessionState.setType(endedState);
                     sessionState.setLastSessionUpdate(LocalDateTime.now());
                 }
                 else{
-                    sessionState.setSessionState(workState);
+                    sessionState.setType(workState);
                     sessionState.setCycleNumber(sessionState.getCycleNumber() + 1);
                     sessionState.setLastSessionUpdate(LocalDateTime.now());
                 }

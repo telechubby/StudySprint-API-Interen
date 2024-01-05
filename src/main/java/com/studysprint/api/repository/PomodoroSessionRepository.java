@@ -11,9 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface PomodoroSessionRepository extends JpaRepository<PomodoroSession, Long> {
-    List<PomodoroSession> findByModeratorAndSessionState_SessionState(User moderator, SessionStateType sessionStateType);
+    List<PomodoroSession> findByModeratorAndSessionState_Type(User moderator, SessionStateType sessionStateType);
 
     Optional<PomodoroSession> findByModeratorAndId(User user, Long sessionId);
 
-    Optional<PomodoroSession> findByModeratorAndIdAndSessionState_SessionState(User moderator, Long id, SessionStateType sessionStateType);
+    Optional<PomodoroSession> findByModeratorAndIdAndSessionState_Type(User moderator, Long id, SessionStateType sessionStateType);
 }

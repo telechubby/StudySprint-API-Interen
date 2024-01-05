@@ -66,6 +66,16 @@ public class AuthenticationService {
         throw new RuntimeException("Invalid Authorization header");
     }
 
+    public Role getRoleByName(String name)
+    {
+        return roleRepository.findByAuthority(name).orElseThrow(RuntimeException::new);
+    }
+
+    public User getUserByUsername(String username)
+    {
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
     public TokenUserDto decodeJwtToken(String token)
     {
         return tokenService.decodeJwt(token);

@@ -85,7 +85,7 @@ public class PomodoroSessionController {
         PomodoroSession session = pomodoroSessionService.createNewSession(user, templateId);
         if(session == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        System.out.println(session.getSessionState().getSessionState().getName());
+        System.out.println(session.getSessionState().getType().getName());
         return new ResponseEntity<>(session, HttpStatus.OK);
     }
 
