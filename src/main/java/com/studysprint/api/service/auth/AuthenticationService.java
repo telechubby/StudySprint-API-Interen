@@ -52,7 +52,7 @@ public class AuthenticationService {
     public User register(RegisterUserDto userForm)
     {
         Set<Role> roleSet = new HashSet<>();
-        Role userRole = roleRepository.findByAuthority("user").get();
+        Role userRole = roleRepository.findByAuthority("USER").orElseThrow(RuntimeException::new);
         roleSet.add(userRole);
         String encodedPassword = encoder.encode(userForm.getPassword());
         User user = new User(0L, userForm.getName(), userForm.getUsername(), encodedPassword, roleSet);
