@@ -143,4 +143,11 @@ public class PomodoroSessionController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(session, HttpStatus.OK);
     }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<Object> getLoggedInUserStatistics(@RequestHeader("Authorization") String authorizationHeader){
+        String token = authenticationService.extractTokenFromAuthorizationHeader(authorizationHeader);
+        User user = authenticationService.decodeJwtToken(token).getUser();
+        return new ResponseEntity<>(pomodoroSessionService.getCurrentUserStatistics(user), HttpStatus.OK);
+    }
 }

@@ -44,10 +44,12 @@ public class ApiApplication {
             SessionStateType workState = new SessionStateType(0L, "WORK");
             SessionStateType breakState = new SessionStateType(0L, "BREAK");
             SessionStateType endedState = new SessionStateType(0L, "ENDED");
+            SessionStateType pausedState = new SessionStateType(0L, "PAUSED");
             sessionStateTypeRepository.save(notStartedState);
             sessionStateTypeRepository.save(workState);
             sessionStateTypeRepository.save(breakState);
             sessionStateTypeRepository.save(endedState);
+            sessionStateTypeRepository.save(pausedState);
             PomodoroSessionTemplate defaultTemplate = new PomodoroSessionTemplate(0L, "Default", 20, 5, 4, true, adminUser);
             pomodoroSessionTemplateRepository.save(defaultTemplate);
         };

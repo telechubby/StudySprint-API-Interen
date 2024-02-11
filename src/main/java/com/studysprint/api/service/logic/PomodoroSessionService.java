@@ -8,6 +8,7 @@ import com.studysprint.api.model.logic.SessionStateType;
 import com.studysprint.api.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -121,6 +122,7 @@ public class PomodoroSessionService {
         SessionStateType workState = sessionStateTypeRepository.findByName("WORK").orElse(null);
         SessionStateType breakState = sessionStateTypeRepository.findByName("BREAK").orElse(null);
         SessionStateType endedState = sessionStateTypeRepository.findByName("ENDED").orElse(null);
+        SessionStateType pausedState = sessionStateTypeRepository.findByName("PAUSED").orElse(null);
         if(session == null || notStartedState == null || workState == null || breakState == null || endedState == null || session.getSessionState() == null)
             return null;
         PomodoroSessionState sessionState = session.getSessionState();
@@ -149,8 +151,6 @@ public class PomodoroSessionService {
             }
         }
         sessionState = sessionStateRepository.save(sessionState);
-        if(sessionState == null)
-            return null;
         session.setSessionState(sessionState);
         return sessionRepository.save(session);
     }
@@ -177,5 +177,13 @@ public class PomodoroSessionService {
         members.remove(toBeAdded);
         session.setMembers(members);
         return sessionRepository.save(session);
+    }
+
+    public long[] getCurrentUserStatistics(User user)
+    {
+        long[] data = new long[7];
+        for(int i=0;i<7;i++)
+            data[i] = sessionRepository.countByCycleNumberAndSessionStarted(LocalDate.now().minusDays(6-i), user);
+        return data;
     }
 }
