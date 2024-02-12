@@ -2,6 +2,7 @@ package com.studysprint.api.web;
 
 import com.studysprint.api.dto.auth.TokenUserDto;
 import com.studysprint.api.dto.logic.CreateSessionTemplateDto;
+import com.studysprint.api.model.auth.User;
 import com.studysprint.api.model.logic.PomodoroSessionTemplate;
 import com.studysprint.api.service.auth.AuthenticationService;
 import com.studysprint.api.service.logic.PomodoroSessionTemplateService;
@@ -49,14 +50,15 @@ public class PomodoroSessionTemplateController {
             if(!userForm.isComplete())
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             String token = authenticationService.extractTokenFromAuthorizationHeader(authorizationHeader);
-            TokenUserDto userDto = authenticationService.decodeJwtToken(token);
+            User user = authenticationService.decodeJwtToken(token).getUser();
             if(userForm.getId() != null)
             {
-                PomodoroSessionTemplate template = pomodoroSessionService.findTemplateById(userForm.getId(), userDto.getUser());
+                System.out.println(userForm);
+                PomodoroSessionTemplate template = pomodoroSessionService.findTemplateById(userForm.getId(), user);
                 if(template == null)
                     return new ResponseEntity<>("Template does not exist for the logged in user", HttpStatus.UNAUTHORIZED);
             }
-            return new ResponseEntity<>(pomodoroSessionService.createOrUpdateSessionTemplate(userForm, userDto.getUser()), HttpStatus.OK);
+            return new ResponseEntity<>(pomodoroSessionService.createOrUpdateSessionTemplate(userForm, user), HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

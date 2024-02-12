@@ -23,4 +23,16 @@ public class CreateSessionTemplateDto {
     public boolean isComplete(){
         return name != null && workMinutes != null && breakMinutes != null && numberOfCycles != null && isPublic != null;
     }
+
+    @Override
+    public String toString() {
+        return "CreateSessionTemplateDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", workMinutes=" + workMinutes +
+                ", breakMinutes=" + breakMinutes +
+                ", numberOfCycles=" + numberOfCycles +
+                ", isPublic=" + isPublic +
+                '}';
+    }
 }
