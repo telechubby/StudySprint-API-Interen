@@ -29,16 +29,16 @@ public class UserPictureController {
         TokenUserDto userDto = authenticationService.decodeJwtToken(token);
         User user = userDto.getUser();
         UserPicture picture = userPictureService.findByUser(user);
-        return new ResponseEntity<>(picture, HttpStatus.OK);
+        return new ResponseEntity<>(picture.getImageBase64(), HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<Object> setUserImage(@RequestHeader("Authorization") String authorizationHeader, String imageBase64)
+    public ResponseEntity<Object> setUserImage(@RequestHeader("Authorization") String authorizationHeader, @RequestBody String imageBase64)
     {
         String token = authenticationService.extractTokenFromAuthorizationHeader(authorizationHeader);
         TokenUserDto userDto = authenticationService.decodeJwtToken(token);
         User user = userDto.getUser();
         UserPicture picture = userPictureService.setUserPicture(user, imageBase64);
-        return new ResponseEntity<>(picture, HttpStatus.OK);
+        return new ResponseEntity<>("Picture set to user "+user.getName(), HttpStatus.OK);
     }
 }

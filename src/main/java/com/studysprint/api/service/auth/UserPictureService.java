@@ -5,6 +5,7 @@ import com.studysprint.api.model.auth.UserPicture;
 import com.studysprint.api.repository.UserPictureRepository;
 import com.studysprint.api.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class UserPictureService{
@@ -28,7 +29,8 @@ public class UserPictureService{
         UserPicture up = pictureRepository.findByUser(user).orElse(null);
         if(up != null)
             up.setImageBase64(imageBase64);
-        up = new UserPicture(user, imageBase64);
+        else
+            up = new UserPicture(0L, user, imageBase64);
         return pictureRepository.save(up);
     }
 }
