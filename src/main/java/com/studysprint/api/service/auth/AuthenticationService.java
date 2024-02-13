@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ public class AuthenticationService {
         Role userRole = roleRepository.findByAuthority("USER").orElseThrow(RuntimeException::new);
         roleSet.add(userRole);
         String encodedPassword = encoder.encode(userForm.getPassword());
-        User user = new User(0L, userForm.getName(), userForm.getUsername(), encodedPassword, roleSet,"");
+        User user = new User(0L, userForm.getName(), userForm.getUsername(), encodedPassword, roleSet,"", new ArrayList<>());
         return userRepository.save(user);
     }
 

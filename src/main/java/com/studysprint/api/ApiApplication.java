@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,9 +35,9 @@ public class ApiApplication {
             ljupceRoles.add(userRole);
             Set<Role> adminRoles = new HashSet<>();
             adminRoles.add(adminRole);
-            User ljupceUser = new User(0L,"Ljupce", "ljupce", encoder.encode("ljupce123"), ljupceRoles, "");
+            User ljupceUser = new User(0L,"Ljupce", "ljupce", encoder.encode("ljupce123"), ljupceRoles, "", new ArrayList<>());
             userRepository.save(ljupceUser);
-            User adminUser = new User(0L,"admin", "admin", encoder.encode("admin"), adminRoles, "");
+            User adminUser = new User(0L,"admin", "admin", encoder.encode("admin"), adminRoles, "", new ArrayList<>());
             adminUser = userRepository.save(adminUser);
             if(sessionStateTypeRepository.findByName("NOT_STARTED").isPresent())
                 return;
