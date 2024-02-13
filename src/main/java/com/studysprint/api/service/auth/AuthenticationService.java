@@ -55,7 +55,7 @@ public class AuthenticationService {
         Role userRole = roleRepository.findByAuthority("USER").orElseThrow(RuntimeException::new);
         roleSet.add(userRole);
         String encodedPassword = encoder.encode(userForm.getPassword());
-        User user = new User(0L, userForm.getName(), userForm.getUsername(), encodedPassword, roleSet);
+        User user = new User(0L, userForm.getName(), userForm.getUsername(), encodedPassword, roleSet,"");
         return userRepository.save(user);
     }
 

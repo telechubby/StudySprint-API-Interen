@@ -1,10 +1,13 @@
 package com.studysprint.api.model.auth;
 
+import com.studysprint.api.utils.AlphanumericString;
+import com.studysprint.api.utils.AlphanumericStringUtility;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
@@ -32,6 +35,16 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private Set<Role> authorities;
+    @AlphanumericString
+    private String friendCode;
+
+    @PrePersist
+    @PreUpdate
+    private void generateAlphanumericCode() {
+        if (friendCode == null || friendCode.isEmpty()) {
+            friendCode = AlphanumericStringUtility.generate(6);
+        }
+    }
 
     public User(String name, String username, String password, Set<Role> authorities) {
         this.name = name;

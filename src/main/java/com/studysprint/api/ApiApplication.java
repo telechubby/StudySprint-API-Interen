@@ -34,9 +34,9 @@ public class ApiApplication {
             ljupceRoles.add(userRole);
             Set<Role> adminRoles = new HashSet<>();
             adminRoles.add(adminRole);
-            User ljupceUser = new User(0L,"Ljupce", "ljupce", encoder.encode("ljupce123"), ljupceRoles);
+            User ljupceUser = new User(0L,"Ljupce", "ljupce", encoder.encode("ljupce123"), ljupceRoles, "");
             userRepository.save(ljupceUser);
-            User adminUser = new User(0L,"admin", "admin", encoder.encode("admin"), adminRoles);
+            User adminUser = new User(0L,"admin", "admin", encoder.encode("admin"), adminRoles, "");
             adminUser = userRepository.save(adminUser);
             if(sessionStateTypeRepository.findByName("NOT_STARTED").isPresent())
                 return;
