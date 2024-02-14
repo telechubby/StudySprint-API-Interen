@@ -88,4 +88,12 @@ public class UserFriendsController {
         User user = userDto.getUser();
         return new ResponseEntity<>(user.getFriends(), HttpStatus.OK);
     }
+
+    @GetMapping("/code")
+    public ResponseEntity<Object> getOwnCode(@RequestHeader("Authorization") String authorizationHeader){
+        String token = authenticationService.extractTokenFromAuthorizationHeader(authorizationHeader);
+        TokenUserDto userDto = authenticationService.decodeJwtToken(token);
+        User user = userDto.getUser();
+        return new ResponseEntity<>(user.getFriendCode(), HttpStatus.OK);
+    }
 }
