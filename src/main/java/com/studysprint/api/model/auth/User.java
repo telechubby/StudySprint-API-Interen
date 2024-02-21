@@ -42,7 +42,7 @@ public class User implements UserDetails {
     @AlphanumericString
     private String friendCode;
     @ManyToMany
-    @JoinTable(name = "friends_list", joinColumns = @JoinColumn(name="user_a"), inverseJoinColumns = @JoinColumn(name = "user_b"))
+    @JoinTable(joinColumns = @JoinColumn(name="user_a"), inverseJoinColumns = @JoinColumn(name = "user_b"))
     @JsonIgnoreProperties("friends")
     private List<User> friends;
 
