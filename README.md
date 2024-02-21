@@ -4,7 +4,7 @@ StudySprint is an innovative mobile application whose role is to help your
 productivity using the Pomodoro technique at work. It also enables
 synchronization of work sessions between multiple users in real time.
 
-This is the frontend for the application built in React Native & Expo.
+This is the backend for the application built in Java Spring, utilizing a PostgreSQL Database.
 
 If you'd like to access and read the documentation for the frontend you can find it <a href="https://github.com/martintrifunov/studysprint">here.</a>
 
