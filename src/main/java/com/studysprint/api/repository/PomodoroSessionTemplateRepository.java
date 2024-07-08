@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface PomodoroSessionTemplateRepository extends JpaRepository<PomodoroSessionTemplate, Long> {
-    Optional<PomodoroSessionTemplate> findByIdAndCreatedByOrIsPublicTrue(Long sessionId, User user);
+    Optional<PomodoroSessionTemplate> findByCreatedByAndId(User user, Long sessionId);
+    Optional<PomodoroSessionTemplate> findByIdAndIsPublicTrue(Long sessionId);
     List<PomodoroSessionTemplate> findByCreatedByOrIsPublicTrue(User user);
 }

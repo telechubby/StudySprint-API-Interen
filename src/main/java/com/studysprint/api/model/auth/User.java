@@ -1,12 +1,19 @@
 package com.studysprint.api.model.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.studysprint.api.utils.AlphanumericString;
+import com.studysprint.api.utils.AlphanumericStringUtility;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,6 +39,20 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private Set<Role> authorities;
+    @AlphanumericString
+    private String friendCode;
+    @ManyToMany
+    @JoinTable(joinColumns = @JoinColumn(name="user_a"), inverseJoinColumns = @JoinColumn(name = "user_b"))
+    @JsonIgnoreProperties("friends")
+    private List<User> friends;
+
+    @PrePersist
+    @PreUpdate
+    private void generateAlphanumericCode() {
+        if (friendCode == null || friendCode.isEmpty()) {
+            friendCode = AlphanumericStringUtility.generate(6);
+        }
+    }
 
     public User(String name, String username, String password, Set<Role> authorities) {
         this.name = name;

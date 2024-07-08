@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,9 +35,9 @@ public class ApiApplication {
             ljupceRoles.add(userRole);
             Set<Role> adminRoles = new HashSet<>();
             adminRoles.add(adminRole);
-            User ljupceUser = new User(0L,"Ljupce", "ljupce", encoder.encode("ljupce123"), ljupceRoles);
+            User ljupceUser = new User(0L,"Ljupce", "ljupce", encoder.encode("ljupce123"), ljupceRoles, "", new ArrayList<>());
             userRepository.save(ljupceUser);
-            User adminUser = new User(0L,"admin", "admin", encoder.encode("admin"), adminRoles);
+            User adminUser = new User(0L,"admin", "admin", encoder.encode("admin"), adminRoles, "", new ArrayList<>());
             adminUser = userRepository.save(adminUser);
             if(sessionStateTypeRepository.findByName("NOT_STARTED").isPresent())
                 return;
@@ -44,10 +45,12 @@ public class ApiApplication {
             SessionStateType workState = new SessionStateType(0L, "WORK");
             SessionStateType breakState = new SessionStateType(0L, "BREAK");
             SessionStateType endedState = new SessionStateType(0L, "ENDED");
+            SessionStateType pausedState = new SessionStateType(0L, "PAUSED");
             sessionStateTypeRepository.save(notStartedState);
             sessionStateTypeRepository.save(workState);
             sessionStateTypeRepository.save(breakState);
             sessionStateTypeRepository.save(endedState);
+            sessionStateTypeRepository.save(pausedState);
             PomodoroSessionTemplate defaultTemplate = new PomodoroSessionTemplate(0L, "Default", 20, 5, 4, true, adminUser);
             pomodoroSessionTemplateRepository.save(defaultTemplate);
         };

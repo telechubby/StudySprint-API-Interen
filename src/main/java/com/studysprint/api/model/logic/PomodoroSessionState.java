@@ -20,6 +20,6 @@ public class PomodoroSessionState {
     private LocalDateTime sessionStarted;
     private LocalDateTime lastSessionUpdate;
     @ManyToOne
-    private SessionStateType sessionState;
+    private SessionStateType type;
     private Integer cycleNumber;
 }
